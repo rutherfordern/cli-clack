@@ -1,0 +1,9 @@
+#!/usr/bin/php
+<?php
+
+// Проверяем тип интерфейса, который использует php
+if (php_sapi_name() !== 'cli') {
+    exit;
+}
+
+echo "Hello World\n";

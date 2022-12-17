@@ -1,0 +1,20 @@
+{
+    "name": "rutherfordern/cli-clack",
+    "type": "project",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+                "CliClack\\App\\": "app/",
+                "CliClack\\Lib\\": "lib/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Egor",
+            "email": "glavnegor@yandex.ru"
+        }
+    ],
+    "require-dev": {
+        "phpunit/phpunit": "^9.5"
+    }
+}
