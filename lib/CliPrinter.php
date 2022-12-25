@@ -2,6 +2,10 @@
 
 namespace CliClack\Lib;
 
+/**
+ * Данный класс помогает выводить сообщения в необходимом виде
+ */
+
 class CliPrinter
 {
     public function out(string $message): void

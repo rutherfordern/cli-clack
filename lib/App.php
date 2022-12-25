@@ -4,13 +4,14 @@ namespace CliClack\Lib;
 
 class App
 {
-    protected object $printer;
+    protected CliPrinter $printer;
 
-    protected array $registry = [];
+    protected CommandRegistry $commandReg;
 
     public function __construct()
     {
         $this->printer = new CliPrinter();
+        $this->commandReg = new CommandRegistry();
     }
 
     public function getPrinter(): object
@@ -18,29 +19,29 @@ class App
         return $this->printer;
     }
 
-    public function registerCommand($name, $callback): void
+    public function registerCommand($name, $callable): void
     {
-        $this->registry[$name] = $callback;
+        $this->commandReg->registerCommand($name, $callable);
     }
 
-    public function getCommand($command)
+    public function registerController($commandName, CommandController $controller): void
     {
-        return $this->registry[$command] ?? null;
+        $this->commandReg->registerController($commandName, $controller);
     }
 
-    public function runCommand(array $argv): void
+    public function runCommand(array $argv = [], $default_command = 'help'): void
     {
-        $commandName = 'help';
+        $command_name = $default_command;
 
         if (isset($argv[1])) {
-            $commandName = $argv[1];
+            $command_name = $argv[1];
         }
 
-        $command = $this->getCommand($commandName);
-        if ($command === null) {
-            throw new \Exception("Command '{$commandName}' is not found");
+        try {
+            call_user_func($this->commandReg->getCallable($command_name), $argv);
+        } catch (\Exception $e) {
+            $this->getPrinter()->display("ERROR: " . $e->getMessage());
+            exit;
         }
-
-        call_user_func($command, $argv);
     }
 }
